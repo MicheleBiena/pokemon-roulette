@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, Input, OnDestroy, OnInit, Optional } from '@angular/core';
+import { APP_BASE_HREF, CommonModule, DOCUMENT } from '@angular/common';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 type AnimationPhase = 'prelude' | 'gather' | 'expand' | 'crack' | 'reveal' | 'dissolve';
@@ -33,7 +33,7 @@ export class MegaEvolutionAnimationModalComponent implements OnInit, OnDestroy {
   private readonly timers: number[] = [];
 
   readonly artworkBaseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
-  readonly megaSymbolUrl = '/Mega_Evolution_symbol.png';
+  readonly megaSymbolUrl: string;
   private readonly timeline: Array<{ phase: AnimationPhase; atMs: number }> = [
     { phase: 'prelude', atMs: 0 },
     { phase: 'gather', atMs: 420 },
@@ -53,7 +53,17 @@ export class MegaEvolutionAnimationModalComponent implements OnInit, OnDestroy {
     return `${this.artworkBaseUrl}/${resolvedMegaId}.png`;
   }
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(
+    public activeModal: NgbActiveModal,
+    @Optional() @Inject(APP_BASE_HREF) baseHref: string | null,
+    @Inject(DOCUMENT) doc: Document,
+  ) {
+    const raw = baseHref
+      ?? (doc.querySelector('base') as HTMLBaseElement | null)?.getAttribute('href')
+      ?? '/';
+    const resolvedBase = raw.endsWith('/') ? raw : `${raw}/`;
+    this.megaSymbolUrl = `${resolvedBase}Mega_Evolution_symbol.png`;
+  }
 
   ngOnInit(): void {
     this.particles = this.buildParticles(20);
