@@ -1,63 +1,43 @@
 <div class="fireworks-container" #fireworksContainer></div>
-<div class="d-flex flex-column align-items-center h-100">
-    <h4 class="congrats-text mt-5">🎉 {{ 'game.end.congrats' | translate }} 🎉</h4>
-    <div class="card mx-3"
-         [ngClass]="(darkMode) ?  'black-card' : 'white-card'">
-        <div class="card-body" >
-            <div #captureArea>
-                <h4 class="card-title text-center">{{ 'game.end.champion' | translate }} {{generation.region}}! </h4>
-                <div class="d-flex row">
-                    <div class="d-flex flex-column col-8 ps-0 pe-4">
-                        <div class="d-flex">
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[0])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[0])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[1])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[1])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[2])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[2])" class="img-fluid rounded-circle">
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[3])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[3])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[4])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[4])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[5])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[5])" class="img-fluid rounded-circle">
-                            </div>
-                        </div>
+
+<main class="end-game-screen">
+    <p class="congrats-text">{{ 'game.end.congrats' | translate }}</p>
+
+    <section class="champion-shell">
+        <div #captureArea class="champion-export">
+            <header class="champion-header">
+                <span class="champion-kicker">Pokemon Roulette</span>
+                <h1>{{ 'game.end.champion' | translate }} {{ generation.region }}!</h1>
+            </header>
+
+            <div class="champion-layout">
+                <section class="team-export-grid">
+                    @for (slot of teamSlots; track slot) {
+                        <article
+                            class="export-pokemon-card"
+                            [class.is-empty]="!trainerTeam[slot]"
+                            style="--color: {{ getPokemonColor(trainerTeam[slot]) || '#64748b' }}">
+                            @if (trainerTeam[slot]; as pokemon) {
+                                <img [src]="getPokemonSprite(pokemon)" alt="">
+                            }
+                        </article>
+                    }
+                </section>
+
+                <aside class="trainer-export-card">
+                    <div class="trainer-export-art">
+                        @if (trainer.sprite) {
+                            <img [src]="trainer.sprite" alt="Trainer">
+                        }
                     </div>
-                    <div class="col m-auto pe-0">
-                        <div class="trainer-container rounded-circle"
-                            [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'">
-                            <img [src]="trainer.sprite" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-success"
-                        (click)="shareResults()">
-                        <ng-icon name="bootstrapShare"></ng-icon> {{ 'game.end.share' | translate }}
-                </button>
+                </aside>
             </div>
         </div>
-    </div>
-</div>
 
+        <div class="champion-actions">
+            <button class="btn btn-success" (click)="shareResults()">
+                <ng-icon name="bootstrapShare"></ng-icon> {{ 'game.end.share' | translate }}
+            </button>
+        </div>
+    </section>
+</main>

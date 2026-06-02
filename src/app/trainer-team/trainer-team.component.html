@@ -1,52 +1,49 @@
-<div class="trainer-team-box rounded-3 p-3 m-3 row gap-3"
-     [ngClass]="(darkMode | async) ? 'border white-shadow' : 'black-border shadow'">
-    <div class="container" >
-          <div class="row gap-2">
-               <div class="trainer-sprite rounded-3 col-3"
-                    [ngClass]="(darkMode | async) ? 'border white-shadow' : 'black-border shadow'">
-                    <img [src]="trainer.sprite" alt="Trainer Sprite" class="img-fluid">
-               </div>
-               <app-badges
-                    class="col-8"
-                    [trainerBadges]="trainerBadges">
-               </app-badges>
-          </div>
+<section class="trainer-team-box">
+    <div class="panel-heading">
+        <h2>{{ 'trainer.storage.team' | translate }}</h2>
+        <span>{{ trainerTeam.length }}/6</span>
     </div>
-    <div class="container">
-          <div class="row gap-2">
-               <div class="row col-12 gap-2 p-0">
-                    @for (i of [0,1,2,3,4,5]; track i) {
-                         <div class="pokemon-container rounded-3 col-3"
-                              [ngClass]="(darkMode | async) ? 'border' : 'black-border shadow'">
-                              @if (trainerTeam[i]?.sprite) {
-                                   <img [src]="getSprite(trainerTeam[i])"
-                                        class="img-fluid"
-                                        placement="bottom"
-                                        ngbTooltip="{{ trainerTeam[i].text | translate }}">
 
-                                   @if (getMegaStoneSprite(trainerTeam[i]); as megaStoneSprite) {
-                                        <button
-                                             type="button"
-                                             class="mega-stone-overlay-button"
-                                             (click)="triggerMegaStoneInterrupt(trainerTeam[i])"
-                                             placement="bottom"
-                                             ngbTooltip="{{ getMegaStoneTextKey(trainerTeam[i]) | translate }}"
-                                             [attr.aria-label]="getMegaStoneTextKey(trainerTeam[i]) | translate">
-                                             <img
-                                                  [src]="megaStoneSprite"
-                                                  class="mega-stone-overlay"
-                                                  [style.background]="getMegaStoneFillStyle(trainerTeam[i])"
-                                                  alt="Mega Stone">
-                                        </button>
-                                   }
-                              }
-                         </div>
-                    }
-               </div>
-               <div class="col-12 p-0 d-flex flex-column flex-md-row gap-2">
-                    <app-storage-pc></app-storage-pc>
-                    <app-pokedex></app-pokedex>
-               </div>
-          </div>
+    <div class="trainer-overview">
+        <div class="trainer-sprite">
+            @if (trainer.sprite) {
+                <img [src]="trainer.sprite" alt="Trainer Sprite">
+            }
+        </div>
+        <app-badges [trainerBadges]="trainerBadges"></app-badges>
     </div>
-</div>
+
+    <div class="team-grid">
+        @for (slot of teamSlots; track slot) {
+            <div class="pokemon-container" [class.is-empty]="!trainerTeam[slot]">
+                @if (trainerTeam[slot]; as pokemon) {
+                    <img
+                        [src]="getSprite(pokemon)"
+                        placement="bottom"
+                        ngbTooltip="{{ pokemon.text | translate }}">
+
+                    @if (getMegaStoneSprite(pokemon); as megaStoneSprite) {
+                        <button
+                            type="button"
+                            class="mega-stone-overlay-button"
+                            (click)="triggerMegaStoneInterrupt(pokemon)"
+                            placement="bottom"
+                            ngbTooltip="{{ getMegaStoneTextKey(pokemon) | translate }}"
+                            [attr.aria-label]="getMegaStoneTextKey(pokemon) | translate">
+                            <img
+                                [src]="megaStoneSprite"
+                                class="mega-stone-overlay"
+                                [style.background]="getMegaStoneFillStyle(pokemon)"
+                                alt="Mega Stone">
+                        </button>
+                    }
+                }
+            </div>
+        }
+    </div>
+
+    <div class="trainer-actions">
+        <app-storage-pc></app-storage-pc>
+        <app-pokedex></app-pokedex>
+    </div>
+</section>

@@ -1,51 +1,36 @@
 <div class="game-container">
-    <div class="row">
-        <div class="extra-options col-12 col-sm-3 d-flex flex-column">
-            <div class="row col-12 col-sm-7 py-2">
-                <div class="col-6 col-sm-12 mb-2">
+    <div class="game-layout">
+        <aside class="extra-options action-rail">
+            <section class="command-panel">
+                <div class="brand-lockup">
+                    <span class="brand-mark"></span>
+                    <h1>Pokemon Roulette</h1>
+                </div>
+                <div class="action-grid">
                     <app-settings-button></app-settings-button>
-                </div>
-                <div class="col-6 col-sm-12 mb-2">
                     <app-coffee-button></app-coffee-button>
-                </div>
-                <div class="col-6 col-sm-12 mb-2">
                     <app-restart-game-button (restartEvent)="resetGameAction()"></app-restart-game-button>
-                </div>
-                <div class="col-6 col-sm-12 mb-2">
                     <app-language-selector></app-language-selector>
                 </div>
-            </div>
-                <!-- <button type="button"
-                        class="btn me-sm-auto"
-                        (click)="mapIsCollapsed = !mapIsCollapsed"
-                        [attr.aria-expanded]="!mapIsCollapsed"
-                        aria-controls="townMapCollapse"
-                        [ngClass]="(darkMode | async) ? 'btn-outline-light' : 'btn-outline-dark'">
-                    <ng-icon name="bootstrapMap"></ng-icon> Town Map
-                </button> -->
-        </div>
-        <div class="main-game col-12 col-sm-5">
-            <app-roulette-container 
-                (resetGameEvent)="resetGame()">
-            </app-roulette-container>
-        </div>
+            </section>
+        </aside>
 
-        <div class="trainer-info col-12 col-sm-4">
-            <div class="trainer-team">
-                <app-trainer-team
-                    (megaStoneInterrupt)="megaStoneInterrupt($event)">
-                </app-trainer-team>
-            </div>
-            <div class="items">
-                <app-items
-                    (rareCandyInterrupt)="rareCandyInterrupt($event)"
-                    (megaStoneInterrupt)="megaStoneInterrupt($event)">
-                </app-items>
-            </div>
-        </div>
+        <main class="main-game">
+            <section class="roulette-stage">
+                <app-roulette-container
+                    (resetGameEvent)="resetGame()">
+                </app-roulette-container>
+            </section>
+        </main>
+
+        <aside class="trainer-info">
+            <app-trainer-team
+                (megaStoneInterrupt)="megaStoneInterrupt($event)">
+            </app-trainer-team>
+            <app-items
+                (rareCandyInterrupt)="rareCandyInterrupt($event)"
+                (megaStoneInterrupt)="megaStoneInterrupt($event)">
+            </app-items>
+        </aside>
     </div>
 </div>
-
-
-
-

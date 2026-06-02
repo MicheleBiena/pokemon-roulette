@@ -1,55 +1,153 @@
-
-.modal-body {
-    color: black;
+.pc-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--app-text);
 }
 
-.modal-body p {
-    font-size: medium;
+.pc-header {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.pc-title {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.pc-title ng-icon {
+  font-size: 1.55rem;
+}
+
+.pc-title h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.pc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.pc-section-heading {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pc-section-heading h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.pc-section-heading span {
+  padding: 0.18rem 0.5rem;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  color: var(--app-text-muted);
+  background: var(--app-surface-muted);
+  font-size: 0.78rem;
+  font-weight: 850;
 }
 
 .pokemon-storage-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 12px;
-  border: solid 1px #ccc;
-  min-height: 60px;
-  border-radius: 4px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.65rem;
+  min-height: 102px;
+  padding: 0.7rem;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  background:
+    radial-gradient(circle at 12% 0%, var(--app-card-glow), transparent 12rem),
+    rgba(11, 18, 32, 0.36);
   overflow: hidden;
 }
 
 .pokemon-storage-card {
-  width: calc((100% - (5 * 12px)) / 6);
-  padding: 2px;
-  border: 1px solid #333;
-  border-radius: 4px;
-  color: rgba(0, 0, 0, 0.87);
-  display: inline-block;
-  box-sizing: border-box;
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0.4rem;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(239, 246, 255, 0.58)),
+    #eff6ff;
+  box-shadow: var(--app-slot-shadow);
   cursor: move;
-  background: #dfe6e9;
-  text-align: center;
-  font-size: 14px;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
-@media (max-width: 768px) {
-  .pokemon-storage-card {
-    width: calc((100% - (2 * 12px)) / 3);
-  }
+.pokemon-storage-card:hover {
+  border-color: rgba(246, 196, 83, 0.86);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.22);
+  transform: translateY(-2px);
+}
+
+.pokemon-storage-card:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus), var(--app-slot-shadow);
+}
+
+.pokemon-storage-card img {
+  width: 96%;
+  height: 96%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 8px rgba(15, 23, 42, 0.18));
+}
+
+.pc-footer {
+  justify-content: flex-end;
+}
+
+.pc-info-modal {
+  color: var(--app-text);
+}
+
+.explain-panel {
+  display: flex;
+  justify-content: center;
+}
+
+.message {
+  max-width: 360px;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  color: #172033;
+  background: var(--app-surface-strong);
+  box-shadow: var(--app-slot-shadow);
+  font-weight: 750;
+  line-height: 1.35;
 }
 
 .cdk-drag-preview {
   box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: var(--app-radius-sm);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .cdk-drag-placeholder {
-  opacity: 0;
+  opacity: 0.24;
 }
 
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+  .pokemon-storage-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }

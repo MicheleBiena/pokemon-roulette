@@ -5,46 +5,66 @@
 </button>
 
 <ng-template #pcStorageModal let-modal>
-  <div class="modal-body" cdkDropListGroup>
-    <h2>{{ 'trainer.storage.team' | translate }}</h2>
-    <div  id="trainerTeam"
-          cdkDropList
-          cdkDropListOrientation="mixed"
-          [cdkDropListData]="trainerTeam"
-          class="pokemon-storage-grid"
-          (cdkDropListDropped)="drop($event)"
-          [cdkDropListEnterPredicate]="teamIsFullPredicate">
-          @for (pokemon of trainerTeam; track pokemon) {
-            <div  class="pokemon-storage-card shadow"
-                  cdkDrag>
-              <img class="img-fluid" [src]="getSprite(pokemon)">
-            </div>
-          }
-    </div>
-    <h2>{{ 'trainer.storage.stored' | translate }}</h2>
-    <div  id="storedPokemon"
-          cdkDropList
-          cdkDropListOrientation="mixed"
-          [cdkDropListData]="storedPokemon"
-          class="pokemon-storage-grid"
-          (cdkDropListDropped)="drop($event)"
-          [cdkDropListEnterPredicate]="lastPokemonPredicate">
-      @for (pokemon of storedPokemon; track pokemon) {
-        <div  class="pokemon-storage-card shadow"
-              [cdkDragData]="pokemon"
-              cdkDrag>
-          <img [src]="getSprite(pokemon)" class="img-fluid">
-        </div>
-      }
-    </div>
+  <div class="modal-body pc-modal" cdkDropListGroup>
+    <header class="pc-header">
+      <div class="pc-title">
+        <ng-icon name="bootstrapPcDisplayHorizontal"></ng-icon>
+        <h1>{{ 'trainer.storage.access' | translate }}</h1>
+      </div>
+    </header>
+
+    <section class="pc-section">
+      <div class="pc-section-heading">
+        <h2>{{ 'trainer.storage.team' | translate }}</h2>
+        <span>{{ trainerTeam.length }}/6</span>
+      </div>
+      <div id="trainerTeam"
+            cdkDropList
+            cdkDropListOrientation="mixed"
+            [cdkDropListData]="trainerTeam"
+            class="pokemon-storage-grid"
+            (cdkDropListDropped)="drop($event)"
+            [cdkDropListEnterPredicate]="teamIsFullPredicate">
+            @for (pokemon of trainerTeam; track pokemon) {
+              <button type="button"
+                    class="pokemon-storage-card"
+                    cdkDrag>
+                <img [src]="getSprite(pokemon)" alt="">
+              </button>
+            }
+      </div>
+    </section>
+
+    <section class="pc-section">
+      <div class="pc-section-heading">
+        <h2>{{ 'trainer.storage.stored' | translate }}</h2>
+        <span>{{ storedPokemon.length }}</span>
+      </div>
+      <div id="storedPokemon"
+            cdkDropList
+            cdkDropListOrientation="mixed"
+            [cdkDropListData]="storedPokemon"
+            class="pokemon-storage-grid"
+            (cdkDropListDropped)="drop($event)"
+            [cdkDropListEnterPredicate]="lastPokemonPredicate">
+        @for (pokemon of storedPokemon; track pokemon) {
+          <button type="button"
+                class="pokemon-storage-card"
+                [cdkDragData]="pokemon"
+                cdkDrag>
+            <img [src]="getSprite(pokemon)" alt="">
+          </button>
+        }
+      </div>
+    </section>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer pc-footer">
     <button type="button" class="btn btn-outline-dark" (click)="logOut()">{{ 'trainer.storage.logout' | translate }}</button>
   </div>
 </ng-template>
 
 <ng-template #pcInfoModal let-modal>
-  <div class="modal-body">
+  <div class="modal-body pc-info-modal">
       <h1>{{ infoModalTitle | translate}}</h1>
       <div class="explain-panel">
           <div class="message">

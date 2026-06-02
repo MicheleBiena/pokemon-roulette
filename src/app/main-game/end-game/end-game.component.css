@@ -1,82 +1,224 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
 .fireworks-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.end-game-screen {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: clamp(0.85rem, 2vw, 1.5rem);
 }
 
 .congrats-text {
-  font-weight: bold;
-  animation: bounce 1.5s infinite alternate;
+  margin: 0;
+  color: #eef4ff;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  text-align: center;
+  text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  animation: championFloat 1.8s ease-in-out infinite alternate;
 }
 
-@keyframes bounce {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-10px);
-  }
+.champion-shell {
+  width: min(100%, 1120px);
 }
 
-.white-card {
-  background-color: rgba(45, 52, 54, 0.60);
-  color: #dfe6e9;
+.champion-export {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 560px;
+  overflow: hidden;
+  padding: clamp(1.1rem, 2.3vw, 1.7rem);
+  border: 1px solid rgba(191, 219, 254, 0.22);
+  border-radius: var(--app-radius-lg);
+  color: #eef4ff;
+  background:
+    radial-gradient(circle at 16% 14%, rgba(239, 68, 68, 0.26), transparent 18rem),
+    radial-gradient(circle at 78% 18%, rgba(37, 99, 235, 0.28), transparent 19rem),
+    radial-gradient(circle at 52% 90%, rgba(246, 196, 83, 0.18), transparent 20rem),
+    linear-gradient(145deg, #07111f, #142036 55%, #1d1732);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 30px 72px rgba(0, 0, 0, 0.42);
 }
 
-.black-card {
-  background-color: rgba(223, 230, 233, 0.60);
-  color: #2d3436;
+.champion-export::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at 50% 46%, black, transparent 78%);
 }
 
-.card {
-  animation: bounceIn 5s;
+.champion-header,
+.champion-layout {
+  position: relative;
+  z-index: 1;
 }
 
-@keyframes bounceIn {
-  0% {
-    transform: scale(0);
-  }
-
-  50% {
-    transform: scale(1.1);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-.card-title {
-  font-weight: bold;
-}
-
-
-.white-shadow {
-  box-shadow: 0 0 0.5em 0 white;
-}
-
-.black-border {
-  border: 1px solid #333;
-}
-
-.pokemon-container {
-  padding: 0px;
-  margin: 0.5rem;
-  aspect-ratio: 1;
-  background: rgb(from var(--color) r g b / 50%);
-}
-
-.trainer-container {
-  padding: 0px;
+.champion-header {
   display: flex;
-  justify-content: center;
+  gap: 0.4rem;
   align-items: center;
+  flex-direction: column;
+  margin-bottom: clamp(0.9rem, 2vw, 1.25rem);
+  text-align: center;
+}
 
-  img {
-    width: 100%;
+.champion-kicker {
+  padding: 0.22rem 0.7rem;
+  border: 1px solid rgba(246, 196, 83, 0.42);
+  border-radius: 999px;
+  color: #fde68a;
+  background: rgba(15, 23, 42, 0.46);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.champion-header h1 {
+  margin: 0;
+  color: #f8fbff;
+  font-size: clamp(2.1rem, 5vw, 4.2rem);
+  font-weight: 950;
+  line-height: 0.96;
+  text-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+}
+
+.champion-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+  gap: clamp(1rem, 2.5vw, 1.55rem);
+  align-items: stretch;
+  height: calc(100% - 112px);
+  min-height: 0;
+}
+
+.team-export-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.65rem, 1.5vw, 1rem);
+}
+
+.export-pokemon-card,
+.trainer-export-card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--app-radius-md);
+  background:
+    radial-gradient(circle at 50% 24%, rgb(from var(--color) r g b / 44%), transparent 8.5rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)),
+    rgba(15, 23, 42, 0.68);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 14px 34px rgba(0, 0, 0, 0.24);
+}
+
+.export-pokemon-card::after,
+.trainer-export-card::after {
+  position: absolute;
+  inset: 0.55rem;
+  pointer-events: none;
+  content: "";
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: calc(var(--app-radius-md) - 4px);
+}
+
+.export-pokemon-card img {
+  position: relative;
+  z-index: 1;
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 14px rgba(0, 0, 0, 0.28));
+}
+
+.export-pokemon-card.is-empty {
+  opacity: 0.45;
+}
+
+.trainer-export-card {
+  --color: #60a5fa;
+  padding: clamp(0.65rem, 1.4vw, 1rem);
+  background:
+    radial-gradient(circle at 50% 22%, rgba(96, 165, 250, 0.42), transparent 11rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.04)),
+    rgba(15, 23, 42, 0.72);
+}
+
+.trainer-export-art {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.trainer-export-art img {
+  width: auto;
+  height: min(78%, 560px);
+  max-width: 94%;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 18px rgba(0, 0, 0, 0.34));
+}
+
+.champion-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.85rem;
+}
+
+@keyframes championFloat {
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+@media (max-width: 860px) {
+  .champion-export {
+    aspect-ratio: auto;
+    min-height: auto;
+  }
+
+  .champion-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .trainer-export-card {
+    min-height: 260px;
+  }
+
+  .trainer-export-art img {
+    height: min(82%, 420px);
+  }
+}
+
+@media (max-width: 560px) {
+  .team-export-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

@@ -1,9 +1,10 @@
-<div class="d-flex justify-content-between align-items-center">
-  <label class="form-check-label">
+<div class="theme-selector">
+  <label class="setting-label" for="themeSelect">
     {{ 'settings.theme.label' | translate }}
   </label>
   <select
-    class="form-select form-select-sm w-auto"
+    id="themeSelect"
+    class="theme-select"
     [ngModel]="currentTheme"
     (change)="onThemeChange($event)"
     [attr.aria-label]="'settings.theme.label' | translate">

@@ -1,22 +1,27 @@
-<div class="wheel-container">
-    <p>{{ currentSegment | translate }}</p>
-    <div class="canvas-container">
-        <canvas id="wheel"
-                #wheel
-                [width]="wheelWidth"
-                [height]="canvasHeight"
-                (click)="spinWheel()">
-        </canvas>
-        <canvas id="pointer"
-                #pointer
-                [width]="cursorWidth"
-                [height]="canvasHeight">
-        </canvas>
+<section class="wheel-container" [class.is-spinning]="spinning">
+    <div class="wheel-status">
+        <span>{{ currentSegment | translate }}</span>
     </div>
-    <button class="btn my-3"
-            [ngClass]="(darkMode | async) ? 'btn-light' : 'btn-dark'"
+
+    <div class="canvas-shell">
+        <div class="canvas-container">
+            <canvas id="wheel"
+                    #wheel
+                    [width]="wheelWidth"
+                    [height]="canvasHeight"
+                    (click)="spinWheel()">
+            </canvas>
+            <canvas id="pointer"
+                    #pointer
+                    [width]="cursorWidth"
+                    [height]="canvasHeight">
+            </canvas>
+        </div>
+    </div>
+
+    <button class="btn btn-primary spin-button"
+            [disabled]="spinning"
             (click)="spinWheel()">
             {{ 'wheel.spin' | translate }}
     </button>
-</div>
-
+</section>

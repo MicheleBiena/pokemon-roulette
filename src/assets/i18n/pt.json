@@ -842,6 +842,7 @@
     }
   },
   "wheel": {
+    "ready": "Pronto",
     "spin": "Clique para girar!"
   },
   "pokemon": {

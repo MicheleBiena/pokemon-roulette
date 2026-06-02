@@ -6,7 +6,7 @@
     <div class="modal-body">
         <h1>{{ 'game.main.roulette.item.found' | translate }} {{ selectedItem!.text | translate}}</h1>
         <div class="explain-panel">
-            <img [src]="selectedItem?.sprite" height="64">
+            <img class="modal-item-sprite" [src]="selectedItem?.sprite" alt="">
             <div class="message">
                 <p>{{ selectedItem!.description | translate}}</p>
             </div>

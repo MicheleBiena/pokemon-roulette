@@ -1,2 +1,45 @@
-/* No component-specific styles needed.
-   Layout handled by Bootstrap utility classes in the template. */
+:host {
+  display: block;
+  width: 100%;
+}
+
+.theme-selector {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.setting-label {
+  color: var(--app-text);
+  font-weight: 800;
+}
+
+.theme-select {
+  min-width: 160px;
+  padding: 0.58rem 2.2rem 0.58rem 0.75rem;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  color: var(--app-text);
+  background-color: var(--app-surface-strong);
+  box-shadow: var(--app-slot-shadow);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.theme-select:focus-visible {
+  outline: none;
+  box-shadow: var(--app-focus), var(--app-slot-shadow);
+}
+
+@media (max-width: 560px) {
+  .theme-selector {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .theme-select {
+    width: 100%;
+  }
+}

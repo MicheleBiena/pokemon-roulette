@@ -218,7 +218,7 @@
     <div class="modal-body">
         <h1>{{ altPrizeText | translate }}</h1>
         <div class="item-panel">
-            <img [src]="altPrizeSprite" height="128">
+            <img class="modal-item-sprite" [src]="altPrizeSprite" alt="">
             <div class="message">
                 <p>{{ altPrizeDescription | translate }}</p>
             </div>
@@ -233,11 +233,11 @@
     <div class="modal-body">
         <h1>{{ pkmnEvoTitle | translate }}</h1>
         <div class="pokemon-switch-panel">
-            <img [src]="pkmnOut.sprite?.front_default" height="128">
+            <img class="modal-pokemon-sprite" [src]="pkmnOut.sprite?.front_default" alt="">
             <div class="message">
                 <p>{{ 'game.main.roulette.evolve.modal.your' | translate }} {{ pkmnOut.text | translate }} {{ 'game.main.roulette.evolve.modal.to' | translate }} {{ pkmnIn.text | translate }}!</p>
             </div>
-            <img [src]="pkmnIn.sprite?.front_default" height="128">
+            <img class="modal-pokemon-sprite" [src]="pkmnIn.sprite?.front_default" alt="">
         </div>
     </div>
     <div class="modal-footer">
@@ -249,11 +249,11 @@
     <div class="modal-body">
         <h1>{{ pkmnTradeTitle | translate }}</h1>
         <div class="pokemon-switch-panel">
-            <img [src]="pkmnOut.sprite?.front_default" height="128">
+            <img class="modal-pokemon-sprite" [src]="pkmnOut.sprite?.front_default" alt="">
             <div class="message">
                 <p>{{ 'game.main.trade.sent' | translate }} {{ pkmnOut.text | translate }} {{ 'game.main.trade.received' | translate }} {{ pkmnIn.text | translate }}!</p>
             </div>
-            <img [src]="pkmnIn.sprite?.front_default" height="128">
+            <img class="modal-pokemon-sprite" [src]="pkmnIn.sprite?.front_default" alt="">
         </div>
     </div>
     <div class="modal-footer">
@@ -265,7 +265,7 @@
     <div class="modal-body">
         <h1>{{ currentContextItem.text | translate }} {{ 'game.main.item.activates' | translate }}</h1>
         <div class="item-panel">
-            <img [src]="currentContextItem.sprite" height="128">
+            <img class="modal-item-sprite" [src]="currentContextItem.sprite" alt="">
             <div class="message">
                 <p>{{ currentContextItem.description | translate }}</p>
             </div>
@@ -296,7 +296,7 @@
         <div class="explain-panel">
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/244.png"
                  alt="Forte igual o Entei!"
-                 height="128">
+                 class="modal-pokemon-sprite">
             <div class="message">
                 <p>{{ 'game.main.rocket.entei.emerges' | translate }}</p>
                 <p>{{ 'game.main.rocket.entei.prevents' | translate}}</p>

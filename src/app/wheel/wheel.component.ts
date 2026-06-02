@@ -43,7 +43,7 @@ export class WheelComponent implements AfterViewInit, OnChanges {
   pointerStrokeColor = 'blue';
   pointerFillColor = 'yellow';
   winningNumber!: number;
-  currentSegment: string = '-';
+  currentSegment: string = 'wheel.ready';
   clickAudio!: SoundFxHandle;
 
   private translatedItems: WheelItem[] = [];
@@ -343,7 +343,7 @@ export class WheelComponent implements AfterViewInit, OnChanges {
         return item.text;
       }
     }
-    return '-';
+    return 'wheel.ready';
   }
 
   private getTotalWeights(): number {

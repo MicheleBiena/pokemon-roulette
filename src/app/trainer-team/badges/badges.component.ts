@@ -19,7 +19,8 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class BadgesComponent {
 
-    @Input() trainerBadges!: Badge[];
+    @Input() trainerBadges: Badge[] = [];
+    readonly badgeSlots = [0, 1, 2, 3, 4, 5, 6, 7];
 
     darkMode!: Observable<boolean>;
 

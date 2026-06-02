@@ -27,7 +27,8 @@ export class ItemsComponent implements OnInit, OnDestroy {
     this.darkMode = this.themeService.isDark$;
   }
 
-  trainerItems!: ItemItem[];
+  trainerItems: ItemItem[] = [];
+  readonly itemSlots = Array.from({ length: 12 }, (_, index) => index);
   @Output() rareCandyInterrupt = new EventEmitter<ItemItem>();
   @Output() megaStoneInterrupt = new EventEmitter<ItemItem>();
 
@@ -55,14 +56,14 @@ export class ItemsComponent implements OnInit, OnDestroy {
   }
 
   getItemSprite(index: number): string {
-    if (this.trainerItems[index]) {
+    if (this.trainerItems?.[index]) {
       return this.trainerItems[index].sprite;
     }
     return './place-holder-pixel.png';
   }
 
   getItemText(index: number): string {
-    if (this.trainerItems[index]) {
+    if (this.trainerItems?.[index]) {
       return this.translateService.instant(this.trainerItems[index].text);
     }
     return 'Empty';

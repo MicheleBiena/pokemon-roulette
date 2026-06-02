@@ -1,19 +1,13 @@
+:host {
+  display: block;
+}
+
 :host ::ng-deep .dropdown-menu {
-  background-color: var(--bs-secondary);
-  border-color: var(--bs-secondary-border-subtle);
+  min-width: 100%;
 }
 
 :host ::ng-deep .dropdown-item {
-  color: white;
-}
-
-:host ::ng-deep .dropdown-item:hover,
-:host ::ng-deep .dropdown-item:focus {
-  background-color: var(--bs-dark);
-  color: white;
-}
-
-:host ::ng-deep .dropdown-item.active {
-  background-color: var(--bs-dark);
-  color: white;
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
 }

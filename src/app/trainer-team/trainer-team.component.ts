@@ -28,9 +28,10 @@ export class TrainerTeamComponent implements OnInit, OnDestroy {
               private darkModeService: DarkModeService,
               private themeService: ThemeService) { }
 
-  trainer!: { sprite: string; };
-  trainerTeam!: PokemonItem[];
-  trainerBadges!: Badge[];
+  trainer: { sprite: string; } = { sprite: '' };
+  trainerTeam: PokemonItem[] = [];
+  trainerBadges: Badge[] = [];
+  readonly teamSlots = [0, 1, 2, 3, 4, 5];
 
   darkMode!: Observable<boolean>;
   @Output() megaStoneInterrupt = new EventEmitter<ItemItem>();

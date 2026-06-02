@@ -38,8 +38,9 @@ export class EndGameComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('captureArea', { static: false }) captureArea!: ElementRef;
 
   generation!: GenerationItem;
-  trainer!: { sprite: string; };
-  trainerTeam!: PokemonItem[];
+  trainer: { sprite: string; } = { sprite: '' };
+  trainerTeam: PokemonItem[] = [];
+  readonly teamSlots = [0, 1, 2, 3, 4, 5];
 
   private fireworks: Fireworks | null = null;
   private generationSubscription: Subscription | null = null;
@@ -101,24 +102,23 @@ export class EndGameComponent implements OnInit, AfterViewInit, OnDestroy {
   async shareResults() {
     if (!this.captureArea) return;
 
-    const element = this.captureArea.nativeElement;
-    const originalBg = element.style.backgroundColor;
-    element.style.backgroundColor = this.darkMode ? 'rgb(223, 230, 233)' : 'rgb(45, 52, 54)';
+    const captureElement = this.captureArea.nativeElement as HTMLElement;
     const scale = 2;
+    const width = captureElement.offsetWidth;
+    const height = captureElement.offsetHeight;
 
-    domtoimage.toBlob(this.captureArea.nativeElement, {
-      width: this.captureArea.nativeElement.scrollWidth * scale,
-      height: this.captureArea.nativeElement.scrollHeight * scale,
+    domtoimage.toBlob(captureElement, {
+      width: width * scale,
+      height: height * scale,
       style: {
         transform: `scale(${scale})`,
         transformOrigin: 'top left',
-        width: `${this.captureArea.nativeElement.scrollWidth * scale}px`,
-        height: `${this.captureArea.nativeElement.scrollHeight * scale}px`
+        width: `${width}px`,
+        height: `${height}px`
       }
     }).then((blob: Blob | null) => {
       if (!blob) return;
       const file = new File([blob], this.generation.region+'-champion.png', { type: 'image/png' });
-      element.style.backgroundColor = originalBg;
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         navigator.share({

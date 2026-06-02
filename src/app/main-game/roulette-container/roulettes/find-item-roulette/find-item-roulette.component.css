@@ -1,42 +1,56 @@
-.title {
-    text-align: center;
-}
-
 .modal-footer {
-    justify-content: center;
+  justify-content: center;
 }
 
 .modal-body {
-    color: black;
-    text-align: center;
+  color: var(--app-text);
+  text-align: center;
 }
 
-.modal-body p {
-    font-size: medium;
+.modal-body h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0;
 }
 
 .explain-panel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-	justify-content: center;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-item-sprite {
+  width: clamp(58px, 12vw, 82px);
+  height: clamp(58px, 12vw, 82px);
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 12px 12px rgba(15, 23, 42, 0.24));
 }
 
 .message {
-    text-align: start;
-	cursor: default;
-	font-size: 8.6px;
-	font-family: "Pokemon GB", Monospace, sans-serif;
-	border-radius: 2px;
-	padding: 8px;
-	position: relative;
-	line-height: 16px;
-	background: white;
-	border: 1px solid white;
-	box-shadow: 0 1px 0 1px black,
-			  inset 0 1px 0 1px black,
-			  0 0 0 1px black,
-			  inset 0 0 0 1px black;
-	user-select: none;
-	max-width: 50%;
+  max-width: min(360px, 52vw);
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  border-radius: var(--app-radius-sm);
+  color: #172033;
+  background: var(--app-surface-strong);
+  box-shadow: var(--app-slot-shadow);
+  cursor: default;
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.35;
+  text-align: start;
+}
+
+@media (max-width: 560px) {
+  .explain-panel {
+    flex-direction: column;
+  }
+
+  .message {
+    max-width: 100%;
+    text-align: center;
+  }
 }
