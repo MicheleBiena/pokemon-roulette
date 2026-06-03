@@ -270,7 +270,7 @@
         "champion": {
           "champion": "Campeón",
           "go": "¡Vamos!",
-          "use": "Usó un(a)",
+          "use": "Usó",
           "victory": "¿Victoria?",
           "yes": "Sí",
           "no": "No"
@@ -306,7 +306,7 @@
             "advantage": "Ventaja",
             "disadvantage": "Desventaja"
           },
-          "use": "Usó un(a)",
+          "use": "Usó",
           "yes": "Sí",
           "no": "No"
         },
@@ -325,7 +325,7 @@
           "against": "Combate contra",
           "defeated": "Derrotado?",
           "go": "¡Vamos!",
-          "used": "Usó un(a)",
+          "used": "Usó",
           "yes": "Sí",
           "no": "No",
           "typeAdvantage": {
@@ -418,6 +418,9 @@
   },
   "items": {
     "title": "Objetos",
+    "effect": "Efecto",
+    "close": "Cerrar",
+    "use": "Usar",
     "potion": {
       "name": "Poción",
       "description": "¡La Poción te permite volver a girar si pierdes un combate de Gimnasio!"

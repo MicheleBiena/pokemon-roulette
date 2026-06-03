@@ -270,7 +270,7 @@
         "champion": {
           "champion": "Champion",
           "go": "C'est parti!",
-          "use": "A utilisé un(e)",
+          "use": "A utilisé",
           "victory": "Victoire?",
           "yes": "Oui",
           "no": "Non"
@@ -306,7 +306,7 @@
             "advantage": "Avantage",
             "disadvantage": "Désavantage"
           },
-          "use": "A utilisé un(e)",
+          "use": "A utilisé",
           "yes": "Oui",
           "no": "Non"
         },
@@ -325,7 +325,7 @@
           "against": "Combat contre",
           "defeated": "Vaincu?",
           "go": "C'est parti!",
-          "used": "A utilisé un(e)",
+          "used": "A utilisé",
           "yes": "Oui",
           "no": "Non",
           "typeAdvantage": {
@@ -418,6 +418,9 @@
   },
   "items": {
     "title": "Objets",
+    "effect": "Effet",
+    "close": "Fermer",
+    "use": "Utiliser",
     "potion": {
       "name": "Potion",
       "description": "La Potion te permet de rejouer si tu perds un combat d'Arène!"

@@ -270,7 +270,7 @@
         "champion": {
           "champion": "Campeão -",
           "go": "Vamos lá!",
-          "use": "Usou ",
+          "use": "Usou",
           "victory": "Vitória?",
           "yes": "Sim",
           "no": "Não"
@@ -306,7 +306,7 @@
             "advantage": "Vantagem",
             "disadvantage": "Desvantagem"
           },
-          "use": "Usou ",
+          "use": "Usou",
           "yes": "Sim",
           "no": "Não"
         },
@@ -325,7 +325,7 @@
           "against": "Batalha contra",
           "defeated": "derrotado?",
           "go": "Vamos lá!",
-          "used": "Usou ",
+          "used": "Usou",
           "yes": "Sim",
           "no": "Não",
           "typeAdvantage": {
@@ -418,6 +418,9 @@
   },
   "items": {
     "title": "Itens",
+    "effect": "Efeito",
+    "close": "Fechar",
+    "use": "Usar",
     "potion": {
       "name": "Poção",
       "description": "A Poção permite girar novamente sempre que você perder uma batalha de Ginásio!"
