@@ -3,7 +3,8 @@
         <div class="badge-container" [class.is-empty]="!trainerBadges[slot]">
             @if (trainerBadges[slot]; as badge) {
                 <img
-                    [src]="badge.sprite"
+                    [src]="getBadgeSprite(badge)"
+                    (error)="onBadgeImageError($event)"
                     placement="bottom"
                     ngbTooltip="{{ badge.name | translate }}"
                     alt="">

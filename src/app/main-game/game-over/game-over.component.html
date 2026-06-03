@@ -1,67 +1,68 @@
-<div class="d-flex flex-column align-items-center h-100">
-    <h4 class="title-text mt-5">{{ 'game.over.title' | translate }}</h4>
-    <div class="card mx-3 my-3"
-         [ngClass]="(darkMode) ?  'black-card' : 'white-card'">
-        <div class="card-body" >
-            <div #captureArea>
-                <h4 class="card-title text-center">
-                    {{ 'game.over.stoppedBy' | translate }} {{ currentRound < 8 ? ('game.over.gymLeader' | translate) : currentRound < 12 ? ('game.over.eliteFour' | translate) : ('game.over.champion' | translate) }} {{currentLeader!.name | translate}}
-                </h4>
-                <div class="d-flex row">
-                    <div class="d-flex flex-column col-8 ps-0 pe-4">
-                        <div class="d-flex">
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[0])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[0])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[1])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[1])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[2])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[2])" class="img-fluid rounded-circle">
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[3])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[3])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[4])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[4])" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="pokemon-container rounded-circle col-4"
-                                [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'"
-                                style="--color: {{getPokemonColor(trainerTeam[5])}}">
-                                <img [src]="getPokemonSprite(trainerTeam[5])" class="img-fluid rounded-circle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col m-auto pe-0">
-                        <div class="trainer-container rounded-circle"
-                            [ngClass]="(darkMode) ? 'black-border shadow' : 'border white-shadow'">
-                            <img [src]="trainer.sprite" class="img-fluid">
-                        </div>
-                    </div>
+<main class="game-over-screen">
+    <section class="run-over-shell">
+        <div #captureArea class="run-over-export">
+            <header class="run-over-header">
+                <div>
+                    <span class="run-kicker">Pokemon Roulette</span>
+                    <h1>{{ 'game.over.title' | translate }}</h1>
                 </div>
-            </div>
-            <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-success"
-                        (click)="shareResults()">
-                        <ng-icon name="bootstrapShare"></ng-icon> {{ 'game.over.share' | translate }}
-                </button>
+
+                <p>
+                    <span>{{ 'game.over.stoppedBy' | translate }}</span>
+                    <strong>
+                        {{ opponentRoleKey | translate }}
+                        @if (currentLeader) {
+                            {{ currentLeader.name | translate }}
+                        }
+                    </strong>
+                </p>
+            </header>
+
+            <div class="run-over-layout">
+                <section class="run-team-panel">
+                    <div class="panel-label">
+                        <span>{{ 'trainer.storage.team' | translate }}</span>
+                        <strong>{{ trainerTeam.length }}/6</strong>
+                    </div>
+
+                    <div class="run-team-grid">
+                        @for (slot of teamSlots; track slot) {
+                            <article
+                                class="run-pokemon-card"
+                                [class.is-empty]="!trainerTeam[slot]"
+                                style="--color: {{ getPokemonColor(trainerTeam[slot]) || '#64748b' }}">
+                                @if (trainerTeam[slot]; as pokemon) {
+                                    <img [src]="getPokemonSprite(pokemon)" alt="">
+                                }
+                            </article>
+                        }
+                    </div>
+                </section>
+
+                <aside class="opponent-showcase">
+                    <div class="opponent-copy">
+                        <span>{{ opponentRoleKey | translate }}</span>
+                        @if (currentLeader) {
+                            <strong>{{ currentLeader.name | translate }}</strong>
+                        }
+                    </div>
+
+                    <div class="opponent-stage">
+                        @if (leaderSprite) {
+                            <img [src]="leaderSprite" alt="">
+                        }
+                    </div>
+                </aside>
             </div>
         </div>
-    </div>
-    <app-restart-game-button
-        (restartEvent)="resetGameAction()">
-    </app-restart-game-button>
-</div>
 
+        <div class="run-actions">
+            <button class="btn btn-success" (click)="shareResults()">
+                <ng-icon name="bootstrapShare"></ng-icon> {{ 'game.over.share' | translate }}
+            </button>
+            <app-restart-game-button
+                (restartEvent)="resetGameAction()">
+            </app-restart-game-button>
+        </div>
+    </section>
+</main>

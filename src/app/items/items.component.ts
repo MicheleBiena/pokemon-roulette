@@ -1,10 +1,10 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { DarkModeService } from '../services/dark-mode-service/dark-mode.service';
 import { ThemeService } from '../services/theme-service/theme.service';
 import { Observable, Subscription } from 'rxjs';
 import { ItemItem } from '../interfaces/item-item';
 import { CommonModule } from '@angular/common';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TrainerService } from '../services/trainer-service/trainer.service';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import { isMegaStoneItemName } from '../services/items-service/item-names';
@@ -22,13 +22,16 @@ export class ItemsComponent implements OnInit, OnDestroy {
     private darkModeService: DarkModeService,
     private themeService: ThemeService,
     private trainerService: TrainerService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private modalService: NgbModal
   ) {
     this.darkMode = this.themeService.isDark$;
   }
 
   trainerItems: ItemItem[] = [];
+  selectedItem: ItemItem | null = null;
   readonly itemSlots = Array.from({ length: 12 }, (_, index) => index);
+  @ViewChild('itemDetailModal', { static: true }) itemDetailModal!: TemplateRef<any>;
   @Output() rareCandyInterrupt = new EventEmitter<ItemItem>();
   @Output() megaStoneInterrupt = new EventEmitter<ItemItem>();
 
@@ -45,7 +48,28 @@ export class ItemsComponent implements OnInit, OnDestroy {
     this.itemsSubscription?.unsubscribe();
   }
 
-  useItem(item: ItemItem | undefined) {
+  openItemDetails(item: ItemItem | undefined): void {
+    if (!item) {
+      return;
+    }
+
+    this.selectedItem = item;
+    this.modalService.open(this.itemDetailModal, {
+      centered: true,
+      size: 'sm'
+    });
+  }
+
+  useSelectedItem(): void {
+    if (!this.selectedItem || !this.canUseItem(this.selectedItem)) {
+      return;
+    }
+
+    this.useItem(this.selectedItem);
+    this.modalService.dismissAll();
+  }
+
+  useItem(item: ItemItem | undefined): void {
     if(item) {
       if (item.name === 'rare-candy') {
         this.rareCandyInterrupt.emit(item);
@@ -53,6 +77,14 @@ export class ItemsComponent implements OnInit, OnDestroy {
         this.megaStoneInterrupt.emit(item);
       }
     }
+  }
+
+  canUseItem(item: ItemItem | null): boolean {
+    if (!item) {
+      return false;
+    }
+
+    return item.name === 'rare-candy' || isMegaStoneItemName(item.name);
   }
 
   getItemSprite(index: number): string {

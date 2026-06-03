@@ -1,73 +1,248 @@
-.title-text {
-    font-weight: bold;
-    animation: bounce 1.5s infinite alternate;
+:host {
+  display: block;
+  min-height: 0;
 }
 
-@keyframes bounce {
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(-10px);
-    }
+.game-over-screen {
+  display: flex;
+  min-height: min(74vh, 720px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.65rem, 1.4vw, 1rem);
 }
 
-.white-card {
-    background-color: rgba(45, 52, 54, 0.60);
-    color: #dfe6e9;
+.run-over-shell {
+  width: min(100%, 1120px);
 }
 
-.black-card {
-    background-color: rgba(223, 230, 233, 0.60);
-    color: #2d3436;
+.run-over-export {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  min-height: clamp(460px, 62vh, 640px);
+  overflow: hidden;
+  padding: clamp(0.85rem, 1.65vw, 1.25rem);
+  border: 1px solid rgba(254, 202, 202, 0.24);
+  border-radius: var(--app-radius-lg);
+  color: #eef4ff;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(239, 68, 68, 0.34), transparent 18rem),
+    linear-gradient(135deg, #130d18, #111827 46%, #172033);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 30px 72px rgba(0, 0, 0, 0.42);
 }
 
-.card {
-    animation: bounceIn 5s;
+.run-over-header,
+.run-over-layout {
+  position: relative;
+  z-index: 1;
 }
 
-@keyframes bounceIn {
-    0% {
-        transform: scale(0);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
-
-    100% {
-        transform: scale(1);
-    }
+.run-over-header {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+  margin-bottom: clamp(0.55rem, 1.2vw, 0.85rem);
+  text-align: center;
 }
 
-.card-title {
-    font-weight: bold;
+.run-kicker {
+  display: inline-flex;
+  padding: 0.22rem 0.7rem;
+  border: 1px solid rgba(248, 113, 113, 0.46);
+  border-radius: 999px;
+  color: #fecaca;
+  background: rgba(15, 23, 42, 0.52);
+  font-size: clamp(0.68rem, 1.2vw, 0.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
 }
 
-
-.white-shadow {
-    box-shadow: 0 0 0.5em 0 white;
+.run-over-header h1 {
+  margin: 0.25rem 0 0;
+  color: #f8fbff;
+  font-size: clamp(1.9rem, 4.2vw, 3.25rem);
+  font-weight: 950;
+  line-height: 0.94;
 }
 
-.black-border {
-    border: 1px solid #333;
+.run-over-header p {
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  color: #cbd5e1;
+  font-weight: 850;
+  text-align: center;
 }
 
-.pokemon-container {
-    padding: 0px;
-    margin: 0.5rem;
-    aspect-ratio: 1;
-    background: rgb(from var(--color) r g b / 50%);
+.run-over-header p span,
+.panel-label span,
+.opponent-copy span {
+  color: #fecaca;
+  font-size: 0.8rem;
+  font-weight: 950;
+  text-transform: uppercase;
 }
 
-.trainer-container {
-    padding: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.run-over-header strong,
+.opponent-copy strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: #ffffff;
+  font-weight: 950;
+  line-height: 1.05;
+}
 
-    img {
-        width: 100%;
-    }
+.run-over-header strong {
+  font-size: clamp(0.95rem, 1.8vw, 1.35rem);
+}
+
+.run-over-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.58fr) minmax(0, 0.42fr);
+  gap: clamp(0.65rem, 1.55vw, 1rem);
+  min-height: 0;
+  align-items: stretch;
+}
+
+.run-team-panel,
+.opponent-showcase,
+.run-pokemon-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--app-radius-md);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035)),
+    rgba(15, 23, 42, 0.62);
+}
+
+.run-team-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(0.45rem, 1vw, 0.7rem);
+  min-height: 250px;
+  padding: clamp(0.55rem, 1.15vw, 0.8rem);
+}
+
+.panel-label {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-label strong {
+  padding: 0.18rem 0.52rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  color: #f8fbff;
+  background: rgba(15, 23, 42, 0.54);
+  font-size: 0.78rem;
+}
+
+.run-team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.45rem, 1vw, 0.72rem);
+  align-content: center;
+  min-height: 0;
+}
+
+.run-pokemon-card {
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  padding: 0.32rem;
+  background:
+    radial-gradient(circle at 50% 36%, rgb(from var(--color, #64748b) r g b / 44%), transparent 5.8rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.035)),
+    rgba(15, 23, 42, 0.68);
+}
+
+.run-pokemon-card img {
+  z-index: 1;
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 12px rgba(0, 0, 0, 0.30));
+}
+
+.run-pokemon-card.is-empty {
+  opacity: 0.32;
+}
+
+.opponent-showcase {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 250px;
+  padding: clamp(0.6rem, 1.2vw, 0.85rem);
+  background:
+    radial-gradient(circle at 54% 48%, rgba(96, 165, 250, 0.26), transparent 12rem),
+    rgba(15, 23, 42, 0.66);
+}
+
+.opponent-copy {
+  display: grid;
+  justify-items: center;
+  margin-bottom: 0.35rem;
+  text-align: center;
+}
+
+.opponent-copy strong {
+  font-size: clamp(1.05rem, 2.15vw, 1.55rem);
+}
+
+.opponent-stage {
+  display: grid;
+  min-height: 0;
+  place-items: center;
+}
+
+.opponent-stage img {
+  z-index: 1;
+  width: auto;
+  max-width: 94%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 26px 20px rgba(0, 0, 0, 0.38));
+}
+
+.run-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 860px) {
+  .run-over-export {
+    min-height: 0;
+  }
+
+  .run-over-header,
+  .run-over-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .run-over-header h1 {
+    font-size: clamp(2rem, 10vw, 3.4rem);
+  }
+
+  .opponent-stage {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 560px) {
+  .run-team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .run-actions {
+    flex-direction: column;
+  }
 }

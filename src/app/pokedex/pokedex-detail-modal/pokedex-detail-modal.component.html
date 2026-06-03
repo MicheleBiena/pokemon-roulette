@@ -1,46 +1,43 @@
-<div class="modal-header" [ngClass]="(darkMode | async) ? 'bg-dark text-white' : ''">
-  <h5 class="modal-title">{{ formatPokemonNumber(pokemonId) }}</h5>
+<div class="modal-header pokedex-detail-header">
+  <div>
+    <span class="detail-number">{{ formatPokemonNumber(pokemonId) }}</span>
+    <h5 class="modal-title">{{ detailsNameKey | translate }}</h5>
+  </div>
   <button type="button" class="btn-close"
-    [ngClass]="(darkMode | async) ? 'btn-close-white' : ''"
     (click)="activeModal.dismiss()" aria-label="Close"></button>
 </div>
-<div class="modal-body text-center" [ngClass]="(darkMode | async) ? 'bg-dark text-white' : ''">
 
-  <!-- Official artwork -->
-  <img [src]="displayUrl"
-       loading="lazy"
-       class="img-fluid mx-auto mb-3 d-block"
-       [alt]="pokemonNameKey | translate"
-       (error)="onArtworkError()">
+<div class="modal-body pokedex-detail-body">
+  <section class="detail-hero">
+    <div class="detail-art-card">
+      <img [src]="displayUrl"
+           loading="lazy"
+           [alt]="pokemonNameKey | translate"
+           (error)="onArtworkError()">
+    </div>
 
-  <table class="table table-sm align-middle mb-2" [ngClass]="(darkMode | async) ? 'table-dark' : ''">
-    <tbody>
-      <tr>
-        <th scope="row" class="text-start detail-label">{{ 'detail.name' | translate }}</th>
-        <td class="fw-semibold">{{ detailsNameKey | translate }}</td>
-      </tr>
-      <tr>
-        <th scope="row" class="text-start detail-label">{{ 'detail.types' | translate }}</th>
-        <td>
-          <div class="type-icons-wrap">
-            @for (type of detailsTypes; track type) {
-              <img class="pokemon-type-icon"
-                   [src]="getTypeIconUrl(type)"
-                   [alt]="type"
-                   loading="lazy">
-            }
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row" class="text-start detail-label">{{ 'detail.power' | translate }}</th>
-        <td>{{ detailsPower }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <div class="detail-facts">
+      <div class="detail-fact">
+        <span>{{ 'detail.types' | translate }}</span>
+        <div class="type-icons-wrap">
+          @for (type of detailsTypes; track type) {
+            <img class="pokemon-type-icon"
+                 [src]="getTypeIconUrl(type)"
+                 [alt]="type"
+                 loading="lazy">
+          }
+        </div>
+      </div>
+
+      <div class="detail-fact">
+        <span>{{ 'detail.power' | translate }}</span>
+        <strong>{{ detailsPower }}</strong>
+      </div>
+    </div>
+  </section>
 
   @if (hasShinyToggle) {
-    <button class="btn btn-sm mb-2"
+    <button class="btn btn-sm shiny-toggle"
             [ngClass]="showShiny ? 'btn-warning' : 'btn-outline-warning'"
             (click)="showShiny = !showShiny">
       {{ showShiny ? ('detail.shiny.on' | translate) : ('detail.shiny.off' | translate) }}
@@ -48,7 +45,7 @@
   }
 
   @if (hasAlternateForms) {
-    <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
+    <div class="form-selector">
       @for (form of alternateForms; track form.pokemonId) {
         <button class="btn btn-sm"
                 [ngClass]="selectedFormId === form.pokemonId ? 'btn-primary' : 'btn-outline-secondary'"
@@ -58,5 +55,4 @@
       }
     </div>
   }
-
 </div>

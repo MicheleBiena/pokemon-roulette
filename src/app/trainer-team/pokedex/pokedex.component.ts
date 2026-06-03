@@ -105,4 +105,12 @@ export class PokedexComponent implements OnInit, OnDestroy {
   get totalCount(): number {
     return this.activeIds.length;
   }
+
+  get caughtProgress(): number {
+    if (this.totalCount === 0) {
+      return 0;
+    }
+
+    return Math.round((this.caughtCount / this.totalCount) * 100);
+  }
 }

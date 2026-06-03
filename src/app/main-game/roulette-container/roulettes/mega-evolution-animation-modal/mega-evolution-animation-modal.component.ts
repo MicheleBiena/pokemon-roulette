@@ -94,6 +94,14 @@ export class MegaEvolutionAnimationModalComponent implements OnInit, OnDestroy {
     return particle.id;
   }
 
+  skip(): void {
+    for (const timer of this.timers) {
+      window.clearTimeout(timer);
+    }
+    this.timers.length = 0;
+    this.activeModal.close();
+  }
+
   private schedule(callback: () => void, delayMs: number): void {
     const timerId = window.setTimeout(callback, delayMs);
     this.timers.push(timerId);

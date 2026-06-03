@@ -46,9 +46,10 @@ export class GameOverComponent implements OnInit, OnDestroy {
   @ViewChild('captureArea', { static: false }) captureArea!: ElementRef;
 
   generation!: GenerationItem;
-  trainer!: { sprite: string; };
-  trainerTeam!: PokemonItem[];
+  trainer: { sprite: string; } = { sprite: '' };
+  trainerTeam: PokemonItem[] = [];
   currentLeader: GymLeader | null = null;
+  readonly teamSlots = [0, 1, 2, 3, 4, 5];
   @Input() currentRound!: number;
   @Output() restartEvent = new EventEmitter<boolean>();
 
@@ -103,27 +104,48 @@ export class GameOverComponent implements OnInit, OnDestroy {
     return pokemon.fillStyle;
   }
 
+  get opponentRoleKey(): string {
+    if (this.currentRound < 8) {
+      return 'game.over.gymLeader';
+    }
+
+    if (this.currentRound < 12) {
+      return 'game.over.eliteFour';
+    }
+
+    return 'game.over.champion';
+  }
+
+  get leaderSprite(): string {
+    const sprite = this.currentLeader?.sprite;
+
+    if (Array.isArray(sprite)) {
+      return sprite[0] ?? '';
+    }
+
+    return sprite ?? '';
+  }
+
   async shareResults() {
     if (!this.captureArea) return;
 
-    const element = this.captureArea.nativeElement;
-    const originalBg = element.style.backgroundColor;
-    element.style.backgroundColor = this.darkMode ? 'rgb(223, 230, 233)' : 'rgb(45, 52, 54)';
+    const captureElement = this.captureArea.nativeElement as HTMLElement;
     const scale = 2;
+    const width = captureElement.offsetWidth;
+    const height = captureElement.offsetHeight;
 
-    domtoimage.toBlob(this.captureArea.nativeElement, {
-      width: this.captureArea.nativeElement.scrollWidth * scale,
-      height: this.captureArea.nativeElement.scrollHeight * scale,
+    domtoimage.toBlob(captureElement, {
+      width: width * scale,
+      height: height * scale,
       style: {
         transform: `scale(${scale})`,
         transformOrigin: 'top left',
-        width: `${this.captureArea.nativeElement.scrollWidth * scale}px`,
-        height: `${this.captureArea.nativeElement.scrollHeight * scale}px`
+        width: `${width}px`,
+        height: `${height}px`
       }
     }).then((blob: Blob | null) => {
       if (!blob) return;
-      const file = new File([blob], 'run-is-over.png', { type: 'image/png' });
-      element.style.backgroundColor = originalBg;
+      const file = new File([blob], `${this.generation.region}-run-over.png`, { type: 'image/png' });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         navigator.share({
@@ -134,7 +156,7 @@ export class GameOverComponent implements OnInit, OnDestroy {
       } else {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'run-is-over.png';
+        link.download = `${this.generation.region}-run-over.png`;
         link.click();
         URL.revokeObjectURL(link.href);
       }

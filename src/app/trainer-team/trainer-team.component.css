@@ -63,7 +63,7 @@
 .trainer-sprite {
   display: grid;
   min-height: 96px;
-  place-items: end center;
+  place-items: center;
   overflow: hidden;
 }
 

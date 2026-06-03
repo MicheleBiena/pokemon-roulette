@@ -6,31 +6,43 @@
 </button>
 
 <ng-template #pokedexModal let-modal>
-  <div class="modal-header" [ngClass]="(darkMode | async) ? 'bg-dark text-white' : ''">
-    <h4 class="modal-title">{{ 'pokedex.title' | translate }}</h4>
-    <button type="button" class="btn-close"
-      [ngClass]="(darkMode | async) ? 'btn-close-white' : ''"
-      (click)="closeModal()" aria-label="Close"></button>
+  <div class="modal-header pokedex-header">
+    <div>
+      <span class="pokedex-kicker">Pokemon Roulette</span>
+      <h4 class="modal-title">{{ 'pokedex.title' | translate }}</h4>
+    </div>
+    <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
   </div>
-  <div class="modal-body" [ngClass]="(darkMode | async) ? 'bg-dark text-white' : ''">
-    <ul class="nav nav-tabs mb-2">
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'local'"
+
+  <div class="modal-body pokedex-body">
+    <section class="pokedex-toolbar">
+      <div class="pokedex-tabs" role="tablist" aria-label="Pokédex view">
+        <button type="button"
+                class="pokedex-tab"
+                [class.active]="activeTab === 'local'"
                 (click)="activeTab = 'local'">
           {{ 'pokedex.tab.local' | translate: { region: currentRegion } }}
         </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" [class.active]="activeTab === 'national'"
+        <button type="button"
+                class="pokedex-tab"
+                [class.active]="activeTab === 'national'"
                 (click)="activeTab = 'national'">
           {{ 'pokedex.tab.national' | translate }}
         </button>
-      </li>
-    </ul>
-    <p class="mb-2">
-      {{ 'pokedex.caught' | translate }} {{ caughtCount }} / {{ totalCount }}
-    </p>
-    <div class="pokedex-grid">
+      </div>
+
+      <div class="pokedex-progress" style="--caught-progress: {{ caughtProgress }}%">
+        <div class="pokedex-count">
+          <span>{{ 'pokedex.caught' | translate }}</span>
+          <strong>{{ caughtCount }} / {{ totalCount }}</strong>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="pokedex-grid">
       @for (id of activeIds; track id) {
         <app-pokedex-entry
           [pokemonId]="id"
@@ -38,6 +50,6 @@
           (entryClicked)="onEntryClicked($event)">
         </app-pokedex-entry>
       }
-    </div>
+    </section>
   </div>
 </ng-template>

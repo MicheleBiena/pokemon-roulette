@@ -69,12 +69,6 @@
   mask-image: radial-gradient(circle at 50% 46%, black, transparent 78%);
 }
 
-.champion-header,
-.champion-layout {
-  position: relative;
-  z-index: 1;
-}
-
 .champion-header {
   display: flex;
   gap: 0.4rem;
@@ -117,6 +111,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(0.65rem, 1.5vw, 1rem);
+  align-content: center;
 }
 
 .export-pokemon-card,
@@ -149,10 +144,14 @@
 .export-pokemon-card img {
   position: relative;
   z-index: 1;
-  width: 82%;
-  height: 82%;
+  width: 88%;
+  height: 88%;
   object-fit: contain;
   filter: drop-shadow(0 18px 14px rgba(0, 0, 0, 0.28));
+}
+
+.export-pokemon-card {
+  aspect-ratio: 1;
 }
 
 .export-pokemon-card.is-empty {

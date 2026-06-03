@@ -1,16 +1,18 @@
 :host {
   display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--app-radius-lg);
 }
 
 .mega-anim-container {
   position: relative;
   display: grid;
-  width: min(92vw, 760px);
+  width: 100%;
   min-height: min(72vh, 520px);
   place-items: center;
   overflow: hidden;
-  border: 1px solid rgba(191, 219, 254, 0.26);
-  border-radius: var(--app-radius-lg);
+  border-radius: inherit;
   background:
     radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.12), transparent 11rem),
     radial-gradient(circle at 28% 22%, rgba(96, 165, 250, 0.2), transparent 15rem),
@@ -19,6 +21,30 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+.mega-skip-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 20;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid rgba(191, 219, 254, 0.28);
+  border-radius: 999px;
+  color: #eaf2ff;
+  background: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mega-skip-button:hover,
+.mega-skip-button:focus-visible {
+  border-color: rgba(246, 196, 83, 0.62);
+  background: rgba(37, 99, 235, 0.84);
+  outline: none;
 }
 
 .mega-background-glow,
@@ -373,7 +399,7 @@
 
 @media (max-width: 680px) {
   .mega-anim-container {
-    width: 92vw;
+    width: 100%;
     min-height: 340px;
   }
 

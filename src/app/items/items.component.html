@@ -13,9 +13,36 @@
                 [attr.aria-label]="getItemText(slot)"
                 placement="bottom"
                 ngbTooltip="{{ getItemText(slot) }}"
-                (click)="useItem(trainerItems[slot])">
+                (click)="openItemDetails(trainerItems[slot])">
                 <img [src]="getItemSprite(slot)" alt="">
             </button>
         }
     </div>
 </section>
+
+<ng-template #itemDetailModal let-modal>
+    <div class="modal-body item-detail-modal">
+        @if (selectedItem; as item) {
+            <div class="item-detail-card">
+                <div class="item-art">
+                    <img [src]="item.sprite" alt="">
+                </div>
+                <div class="item-copy">
+                    <span>{{ 'items.effect' | translate }}</span>
+                    <h1>{{ item.text | translate }}</h1>
+                    <p>{{ item.description | translate }}</p>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="modal-footer item-detail-actions">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+            {{ 'items.close' | translate }}
+        </button>
+        @if (canUseItem(selectedItem)) {
+            <button type="button" class="btn btn-success" (click)="useSelectedItem()">
+                {{ 'items.use' | translate }}
+            </button>
+        }
+    </div>
+</ng-template>

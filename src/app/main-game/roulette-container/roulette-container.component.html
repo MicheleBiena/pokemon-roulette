@@ -263,7 +263,7 @@
 
 <ng-template #itemActivateModal let-modal>
     <div class="modal-body">
-        <h1>{{ currentContextItem.text | translate }} {{ 'game.main.item.activates' | translate }}</h1>
+        <h1>{{ 'items.effect' | translate }}: {{ currentContextItem.text | translate }}</h1>
         <div class="item-panel">
             <img class="modal-item-sprite" [src]="currentContextItem.sprite" alt="">
             <div class="message">

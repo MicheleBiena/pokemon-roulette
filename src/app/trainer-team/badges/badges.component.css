@@ -31,6 +31,13 @@
   animation: badge-show 720ms ease;
 }
 
+.badge-container img.is-broken {
+  width: 46%;
+  height: 46%;
+  opacity: 0.5;
+  filter: none;
+}
+
 .badge-container.is-empty {
   opacity: 0.36;
 }

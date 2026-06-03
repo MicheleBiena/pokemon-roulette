@@ -418,6 +418,9 @@
   },
   "items": {
     "title": "Items",
+    "effect": "Effekt",
+    "close": "Schliessen",
+    "use": "Benutzen",
     "potion": {
       "name": "Trank",
       "description": "Tränke lassen dich noch einmal drehen, wenn du in einem Arena-Kampf verlierst!"

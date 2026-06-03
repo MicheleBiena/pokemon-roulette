@@ -21,10 +21,33 @@ export class BadgesComponent {
 
     @Input() trainerBadges: Badge[] = [];
     readonly badgeSlots = [0, 1, 2, 3, 4, 5, 6, 7];
+    private readonly spriteOverrides: Record<string, string> = {
+      'badges.normalium_z': 'https://img.pokemondb.net/sprites/items/normalium-z.png',
+      'badges.fightinium_z': 'https://img.pokemondb.net/sprites/items/fightinium-z.png',
+      'badges.waterium_z': 'https://img.pokemondb.net/sprites/items/waterium-z.png',
+      'badges.firium_z': 'https://img.pokemondb.net/sprites/items/firium-z.png',
+      'badges.grassium_z': 'https://img.pokemondb.net/sprites/items/grassium-z.png',
+      'badges.rockium_z': 'https://img.pokemondb.net/sprites/items/rockium-z.png',
+      'badges.electrium_z': 'https://img.pokemondb.net/sprites/items/electrium-z.png',
+      'badges.ghostium_z': 'https://img.pokemondb.net/sprites/items/ghostium-z.png',
+      'badges.darkinium_z': 'https://img.pokemondb.net/sprites/items/darkinium-z.png',
+      'badges.fairium_z': 'https://img.pokemondb.net/sprites/items/fairium-z.png',
+      'badges.groundium_z': 'https://img.pokemondb.net/sprites/items/groundium-z.png'
+    };
 
     darkMode!: Observable<boolean>;
 
     constructor(private darkModeService: DarkModeService, private themeService: ThemeService) {
       this.darkMode = this.themeService.isDark$;
+    }
+
+    getBadgeSprite(badge: Badge): string {
+      return this.spriteOverrides[badge.name] ?? badge.sprite;
+    }
+
+    onBadgeImageError(event: Event): void {
+      const image = event.target as HTMLImageElement;
+      image.src = './place-holder-pixel.png';
+      image.classList.add('is-broken');
     }
 }

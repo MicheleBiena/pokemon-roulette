@@ -268,6 +268,44 @@ body.theme-starters .title {
   color: var(--app-text);
 }
 
+.modal-content .modal-body.modal-body {
+  color: #eef4ff;
+}
+
+.modal-content .modal-body.modal-body h1 {
+  color: #f8fbff;
+  text-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+}
+
+.modal-content .modal-body .message.message,
+.modal-content .modal-body .quotes.quotes,
+.modal-content .modal-body .dialog.dialog {
+  max-width: min(420px, 58vw);
+  padding: 0.95rem 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(191, 219, 254, 0.22);
+  border-radius: var(--app-radius-md);
+  color: #dbe7ff;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(246, 196, 83, 0.16), transparent 9rem),
+    linear-gradient(180deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.9));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 16px 34px rgba(0, 0, 0, 0.26);
+  font-family: var(--app-font-sans);
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.35;
+  text-align: start;
+}
+
+.modal-content .modal-body .message.message p,
+.modal-content .modal-body .quotes.quotes p,
+.modal-content .modal-body .dialog.dialog p {
+  margin: 0;
+  color: inherit;
+}
+
 .modal-body img[src*="/sprites/items/"] {
   width: clamp(58px, 12vw, 82px);
   height: clamp(58px, 12vw, 82px);

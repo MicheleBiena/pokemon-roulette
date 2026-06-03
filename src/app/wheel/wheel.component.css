@@ -17,11 +17,12 @@
   display: grid;
   place-items: center;
   padding: 0.58rem 0.9rem;
-  border: 1px solid var(--app-border);
+  border: 1px solid rgba(191, 219, 254, 0.16);
   border-radius: var(--app-radius-md);
   color: #eef4ff;
   background:
-    linear-gradient(180deg, rgba(23, 37, 61, 0.96), rgba(11, 18, 32, 0.92)),
+    radial-gradient(circle at 18% 0%, rgba(246, 196, 83, 0.12), transparent 14rem),
+    linear-gradient(180deg, rgba(20, 32, 51, 0.96), rgba(9, 14, 25, 0.94)),
     var(--app-surface-strong);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -43,16 +44,17 @@
   display: grid;
   place-items: center;
   width: min(100%, 700px);
-  padding: clamp(0.65rem, 1.5vw, 1rem);
-  border: 1px solid var(--app-border);
+  padding: clamp(0.55rem, 1.2vw, 0.85rem);
+  border: 1px solid rgba(191, 219, 254, 0.18);
   border-radius: var(--app-radius-lg);
   background:
-    radial-gradient(circle at 50% 35%, rgba(246, 196, 83, 0.16), transparent 18rem),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)),
-    rgba(11, 18, 32, 0.72);
+    radial-gradient(circle at 45% 38%, rgba(59, 130, 246, 0.14), transparent 17rem),
+    radial-gradient(circle at 62% 62%, rgba(246, 196, 83, 0.10), transparent 14rem),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.10), rgba(8, 13, 23, 0.24)),
+    rgba(9, 14, 25, 0.76);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.24),
-    var(--app-panel-shadow);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 26px 54px rgba(2, 6, 23, 0.24);
 }
 
 .canvas-container {
@@ -67,19 +69,23 @@ canvas#wheel {
   max-width: calc(100vw - 7rem);
   height: auto;
   cursor: pointer;
-  filter: drop-shadow(0 24px 28px rgba(0, 0, 0, 0.34));
+  filter:
+    drop-shadow(0 22px 26px rgba(0, 0, 0, 0.30))
+    drop-shadow(0 0 20px rgba(214, 168, 64, 0.12));
   transition: transform 220ms ease, filter 220ms ease;
 }
 
 canvas#wheel:hover {
   transform: scale(1.01);
-  filter: drop-shadow(0 30px 34px rgba(0, 0, 0, 0.4));
+  filter:
+    drop-shadow(0 28px 32px rgba(0, 0, 0, 0.36))
+    drop-shadow(0 0 24px rgba(214, 168, 64, 0.18));
 }
 
 canvas#pointer {
   height: auto;
-  margin-left: -0.15rem;
-  filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.24));
+  margin-left: -0.32rem;
+  filter: drop-shadow(0 10px 12px rgba(246, 196, 83, 0.24));
   pointer-events: none;
 }
 
@@ -97,7 +103,9 @@ canvas#pointer {
 }
 
 .is-spinning canvas#wheel {
-  filter: drop-shadow(0 28px 34px rgba(239, 68, 68, 0.32));
+  filter:
+    drop-shadow(0 28px 34px rgba(59, 130, 246, 0.24))
+    drop-shadow(0 0 30px rgba(246, 196, 83, 0.20));
 }
 
 .is-spinning .wheel-status {

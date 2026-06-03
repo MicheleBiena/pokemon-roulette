@@ -40,14 +40,25 @@ export class WheelComponent implements AfterViewInit, OnChanges {
   totalRotations!: number;
   duration = Math.floor(Math.random() * (2000)) + 3000;
   finalRotation = 0;
-  pointerStrokeColor = 'blue';
-  pointerFillColor = 'yellow';
   winningNumber!: number;
   currentSegment: string = 'wheel.ready';
   clickAudio!: SoundFxHandle;
 
   private translatedItems: WheelItem[] = [];
   private readonly mobileBreakpoint = 768;
+  private colorParserCtx: CanvasRenderingContext2D | null = null;
+  private readonly segmentPalette = [
+    '#256d85',
+    '#7c3aed',
+    '#b45309',
+    '#047857',
+    '#be123c',
+    '#1d4ed8',
+    '#a21caf',
+    '#4d7c0f',
+    '#0f766e',
+    '#6d28d9'
+  ];
 
   constructor(
     private darkModeService: DarkModeService,
@@ -61,7 +72,7 @@ export class WheelComponent implements AfterViewInit, OnChanges {
     this.darkMode = this.themeService.isDark$;
     this.canvasHeight = 0;
     this.wheelWidth = 0;
-    this.cursorWidth = 40;
+    this.cursorWidth = 54;
     this.fontSize = 0;
     this.updateWheelDimensions();
   }
@@ -72,7 +83,6 @@ export class WheelComponent implements AfterViewInit, OnChanges {
     this.pointerCanvas = this.pointerCanvasRef.nativeElement;
     this.pointerCtx = this.pointerCanvas.getContext('2d')!;
 
-    // Wait for translations to be ready
     this.translateService.get('wheel.spin').subscribe(() => {
       this.preprocessTranslations();
       this.drawWheel();
@@ -113,27 +123,30 @@ export class WheelComponent implements AfterViewInit, OnChanges {
 
     this.canvasHeight = viewportMin * wheelScale;
     this.wheelWidth = this.canvasHeight;
-    this.fontSize = this.wheelWidth / 24;
+    this.fontSize = this.wheelWidth / 26;
 
     if (this.items.length >= 32) {
-      this.fontSize = Math.min(this.fontSize, 10);
+      this.fontSize = Math.min(this.fontSize, 9);
     } else if (this.items.length >= 16) {
-      this.fontSize = Math.min(this.fontSize, 14);
+      this.fontSize = Math.min(this.fontSize, 12);
     }
   }
 
   private drawWheel(rotation = 0): void {
     const centerX = this.wheelCanvas.width / 2;
     const centerY = this.wheelCanvas.height / 2;
-    const radius = (this.wheelCanvas.width / 2);
-    const segRadius = radius * 0.90;  // leave outer 10% for border ring (WHEEL-02)
+    const radius = this.wheelCanvas.width / 2;
+    const segRadius = radius * 0.82;
 
-    const totalWeight = this.getTotalWeights();
-    const arcSize = (2 * Math.PI) / (totalWeight);
     this.wheelCtx.clearRect(0, 0, this.wheelCanvas.width, this.wheelCanvas.height);
 
-    // Border ring first — behind segments (WHEEL-02)
-    this.drawBorderRing(centerX, centerY, radius);
+    const totalWeight = this.getTotalWeights();
+    if (totalWeight <= 0) {
+      return;
+    }
+
+    const arcSize = (2 * Math.PI) / totalWeight;
+    this.drawWheelBackplate(centerX, centerY, radius);
 
     let startAngle = rotation;
     for (let index = 0; index < this.translatedItems.length; index++) {
@@ -141,100 +154,298 @@ export class WheelComponent implements AfterViewInit, OnChanges {
       const segmentSize = arcSize * item.weight;
       const endAngle = startAngle + segmentSize;
 
-      /** Draw the segment */
       this.wheelCtx.beginPath();
       this.wheelCtx.arc(centerX, centerY, segRadius, startAngle, endAngle);
       this.wheelCtx.lineTo(centerX, centerY);
-      this.wheelCtx.fillStyle = item.fillStyle;
+      this.wheelCtx.fillStyle = this.getSegmentFill(item.fillStyle, index);
       this.wheelCtx.fill();
+      this.wheelCtx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      this.wheelCtx.lineWidth = Math.max(1, radius * 0.004);
+      this.wheelCtx.stroke();
 
-      if (this.translatedItems.length < 160) {
-        /** Draw the text */
-        this.wheelCtx.save();
-        this.wheelCtx.translate(centerX, centerY);
-        this.wheelCtx.rotate(startAngle + segmentSize / 2);
-        this.wheelCtx.fillStyle = '#fff';
-        this.wheelCtx.font = this.fontSize + 'px Arial';
-        this.wheelCtx.textAlign = 'right';
-        this.wheelCtx.fillText(item.text, segRadius - 7, 5);
-        this.wheelCtx.restore();
+      if (this.shouldDrawLabels()) {
+        this.drawSegmentLabel(item.text, centerX, centerY, startAngle, segmentSize, segRadius, radius);
       }
 
       startAngle = endAngle;
     }
 
-    // Pokéball on top — last draw call (WHEEL-01)
-    const pbRadius = window.innerWidth <= this.mobileBreakpoint ? radius * 0.15 : radius * 0.10;
+    this.drawWheelGloss(centerX, centerY, radius);
+    this.drawBorderRing(centerX, centerY, radius);
+
+    const pbRadius = window.innerWidth <= this.mobileBreakpoint ? radius * 0.14 : radius * 0.095;
     this.drawPokeball(centerX, centerY, pbRadius);
+  }
+
+  private drawWheelBackplate(cx: number, cy: number, radius: number): void {
+    const ctx = this.wheelCtx;
+    const gradient = ctx.createRadialGradient(cx, cy, radius * 0.18, cx, cy, radius);
+    gradient.addColorStop(0, 'rgba(30, 41, 59, 0.84)');
+    gradient.addColorStop(0.72, 'rgba(15, 23, 42, 0.96)');
+    gradient.addColorStop(1, 'rgba(2, 6, 23, 1)');
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * 0.98, 0, Math.PI * 2);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+  }
+
+  private drawWheelGloss(cx: number, cy: number, radius: number): void {
+    const ctx = this.wheelCtx;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * 0.82, 0, Math.PI * 2);
+    ctx.clip();
+
+    const gloss = ctx.createRadialGradient(cx - radius * 0.22, cy - radius * 0.34, 0, cx, cy, radius);
+    gloss.addColorStop(0, 'rgba(255, 255, 255, 0.16)');
+    gloss.addColorStop(0.32, 'rgba(255, 255, 255, 0.04)');
+    gloss.addColorStop(1, 'rgba(0, 0, 0, 0.24)');
+
+    ctx.fillStyle = gloss;
+    ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+    ctx.restore();
   }
 
   private drawBorderRing(cx: number, cy: number, radius: number): void {
     const ctx = this.wheelCtx;
-    const segRadius = radius * 0.90;
-    const ringWidth = radius - segRadius;
-    const ringMidR  = segRadius + ringWidth / 2;
-
-    const gradient = ctx.createRadialGradient(cx, cy, segRadius, cx, cy, radius);
-    gradient.addColorStop(0.0,  '#2C1A0A');
-    gradient.addColorStop(0.4,  '#8B6914');
-    gradient.addColorStop(0.75, '#DAA520');
-    gradient.addColorStop(1.0,  '#FFD700');
+    const ringWidth = radius * 0.12;
+    const ringRadius = radius - ringWidth / 2 - 1;
+    const gradient = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
+    gradient.addColorStop(0, '#0f172a');
+    gradient.addColorStop(0.28, '#334155');
+    gradient.addColorStop(0.52, '#d6a840');
+    gradient.addColorStop(0.74, '#475569');
+    gradient.addColorStop(1, '#111827');
 
     ctx.beginPath();
-    ctx.arc(cx, cy, ringMidR, 0, Math.PI * 2);
-    ctx.lineWidth   = ringWidth;
+    ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+    ctx.lineWidth = ringWidth;
     ctx.strokeStyle = gradient;
     ctx.stroke();
 
-    // thin black outer edge
     ctx.beginPath();
-    ctx.arc(cx, cy, radius - 0.5, 0, Math.PI * 2);
-    ctx.lineWidth   = 1;
-    ctx.strokeStyle = '#000000';
+    ctx.arc(cx, cy, radius * 0.84, 0, Math.PI * 2);
+    ctx.lineWidth = Math.max(2, radius * 0.012);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * 0.985, 0, Math.PI * 2);
+    ctx.lineWidth = Math.max(2, radius * 0.014);
+    ctx.strokeStyle = 'rgba(2, 6, 23, 0.92)';
     ctx.stroke();
   }
 
   private drawPokeball(cx: number, cy: number, pbRadius: number): void {
     const ctx = this.wheelCtx;
 
-    // Red upper half
+    ctx.save();
+    ctx.shadowColor = 'rgba(2, 6, 23, 0.45)';
+    ctx.shadowBlur = pbRadius * 0.36;
+    ctx.shadowOffsetY = pbRadius * 0.08;
+
     ctx.beginPath();
     ctx.arc(cx, cy, pbRadius, 0, Math.PI, true);
     ctx.closePath();
-    ctx.fillStyle = '#CC0000';
+    ctx.fillStyle = '#e11d48';
     ctx.fill();
 
-    // White lower half
     ctx.beginPath();
     ctx.arc(cx, cy, pbRadius, 0, Math.PI, false);
     ctx.closePath();
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = '#f8fafc';
     ctx.fill();
 
-    // Black outer ring
+    ctx.shadowBlur = 0;
     ctx.beginPath();
     ctx.arc(cx, cy, pbRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = '#000000';
+    ctx.strokeStyle = '#020617';
     ctx.lineWidth = pbRadius * 0.12;
     ctx.stroke();
 
-    // Black belt
-    const beltHW = pbRadius * 0.12;
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(cx - pbRadius, cy - beltHW, pbRadius * 2, beltHW * 2);
+    const beltHeight = pbRadius * 0.22;
+    ctx.fillStyle = '#020617';
+    ctx.fillRect(cx - pbRadius, cy - beltHeight / 2, pbRadius * 2, beltHeight);
 
-    // Button: black outer circle
-    const btnRadius = pbRadius * 0.28;
+    const btnRadius = pbRadius * 0.30;
     ctx.beginPath();
     ctx.arc(cx, cy, btnRadius, 0, Math.PI * 2);
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = '#020617';
     ctx.fill();
 
-    // Button: grey inner fill
     ctx.beginPath();
-    ctx.arc(cx, cy, btnRadius * 0.65, 0, Math.PI * 2);
-    ctx.fillStyle = '#DDDDDD';
+    ctx.arc(cx, cy, btnRadius * 0.62, 0, Math.PI * 2);
+    ctx.fillStyle = '#e5edf7';
     ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, btnRadius * 0.36, 0, Math.PI * 2);
+    ctx.fillStyle = '#f8fafc';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  private shouldDrawLabels(): boolean {
+    return this.translatedItems.length <= 48;
+  }
+
+  private drawSegmentLabel(
+    text: string,
+    cx: number,
+    cy: number,
+    startAngle: number,
+    segmentSize: number,
+    segRadius: number,
+    radius: number
+  ): void {
+    const ctx = this.wheelCtx;
+    const angle = startAngle + segmentSize / 2;
+    const normalizedAngle = (angle % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    const shouldFlip = normalizedAngle > Math.PI / 2 && normalizedAngle < Math.PI * 1.5;
+    const label = this.getSegmentLabel(text);
+    const labelRadius = segRadius - radius * 0.08;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    ctx.textBaseline = 'middle';
+    ctx.font = `800 ${this.fontSize}px Trebuchet MS, Arial, sans-serif`;
+    ctx.lineWidth = Math.max(2, this.fontSize * 0.22);
+    ctx.strokeStyle = 'rgba(2, 6, 23, 0.72)';
+    ctx.fillStyle = '#f8fbff';
+
+    if (shouldFlip) {
+      ctx.rotate(Math.PI);
+      ctx.textAlign = 'left';
+      ctx.strokeText(label, -labelRadius, 0);
+      ctx.fillText(label, -labelRadius, 0);
+    } else {
+      ctx.textAlign = 'right';
+      ctx.strokeText(label, labelRadius, 0);
+      ctx.fillText(label, labelRadius, 0);
+    }
+
+    ctx.restore();
+  }
+
+  private getSegmentLabel(text: string): string {
+    const maxLength = this.translatedItems.length >= 28 ? 11 : this.translatedItems.length >= 16 ? 16 : 22;
+
+    if (text.length <= maxLength) {
+      return text;
+    }
+
+    return `${text.slice(0, Math.max(1, maxLength - 3)).trim()}...`;
+  }
+
+  private getSegmentFill(color: string, index: number): string {
+    let rgb = this.resolveCssColor(color);
+
+    if (!rgb || (rgb.r < 12 && rgb.g < 12 && rgb.b < 12) || (rgb.r > 245 && rgb.g > 245 && rgb.b > 245)) {
+      rgb = this.resolveCssColor(this.segmentPalette[index % this.segmentPalette.length]);
+    }
+
+    if (!rgb) {
+      return this.segmentPalette[index % this.segmentPalette.length];
+    }
+
+    const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
+    const saturation = Math.min(64, Math.max(38, hsl.s * 0.72));
+    const lightness = Math.min(44, Math.max(28, hsl.l * 0.74));
+
+    return `hsl(${Math.round(hsl.h)}, ${Math.round(saturation)}%, ${Math.round(lightness)}%)`;
+  }
+
+  private resolveCssColor(color: string): { r: number; g: number; b: number } | null {
+    if (!color?.trim() || typeof document === 'undefined') {
+      return null;
+    }
+
+    if (!this.colorParserCtx) {
+      this.colorParserCtx = document.createElement('canvas').getContext('2d');
+    }
+
+    const ctx = this.colorParserCtx;
+    if (!ctx) {
+      return null;
+    }
+
+    ctx.fillStyle = '#000000';
+    ctx.fillStyle = color.trim();
+
+    return this.parseColorString(ctx.fillStyle);
+  }
+
+  private parseColorString(value: string): { r: number; g: number; b: number } | null {
+    if (value.startsWith('#')) {
+      const hex = value.slice(1);
+
+      if (hex.length === 3) {
+        return {
+          r: Number.parseInt(hex[0] + hex[0], 16),
+          g: Number.parseInt(hex[1] + hex[1], 16),
+          b: Number.parseInt(hex[2] + hex[2], 16)
+        };
+      }
+
+      if (hex.length === 6) {
+        return {
+          r: Number.parseInt(hex.slice(0, 2), 16),
+          g: Number.parseInt(hex.slice(2, 4), 16),
+          b: Number.parseInt(hex.slice(4, 6), 16)
+        };
+      }
+    }
+
+    const rgbMatch = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+
+    if (!rgbMatch) {
+      return null;
+    }
+
+    return {
+      r: Number(rgbMatch[1]),
+      g: Number(rgbMatch[2]),
+      b: Number(rgbMatch[3])
+    };
+  }
+
+  private rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
+    const red = r / 255;
+    const green = g / 255;
+    const blue = b / 255;
+    const max = Math.max(red, green, blue);
+    const min = Math.min(red, green, blue);
+    let h = 0;
+    let s = 0;
+    const l = (max + min) / 2;
+
+    if (max !== min) {
+      const delta = max - min;
+      s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+
+      switch (max) {
+        case red:
+          h = (green - blue) / delta + (green < blue ? 6 : 0);
+          break;
+        case green:
+          h = (blue - red) / delta + 2;
+          break;
+        default:
+          h = (red - green) / delta + 4;
+          break;
+      }
+
+      h /= 6;
+    }
+
+    return {
+      h: h * 360,
+      s: s * 100,
+      l: l * 100
+    };
   }
 
   drawPointer(): void {
@@ -243,27 +454,29 @@ export class WheelComponent implements AfterViewInit, OnChanges {
 
     const pw = this.pointerCanvas.width;
     const ph = this.pointerCanvas.height;
-    const cw = this.cursorWidth;        // 40
-    const bx = pw - cw;
-    const by = ph / 2 - cw / 2;
+    const size = Math.min(pw - 4, this.cursorWidth);
+    const x = 1;
+    const cy = ph / 2;
+    const gradient = this.pointerCtx.createLinearGradient(x, cy - size * 0.28, x + size, cy + size * 0.28);
+    gradient.addColorStop(0, '#fde68a');
+    gradient.addColorStop(0.55, '#f59e0b');
+    gradient.addColorStop(1, '#b45309');
 
     this.pointerCtx.beginPath();
-    this.pointerCtx.moveTo(bx,  by + cw*0.5);
-    this.pointerCtx.lineTo(bx + cw*0.5,  by + cw);
-    this.pointerCtx.lineTo(bx + cw*0.45,  by + cw*0.75);
-    this.pointerCtx.lineTo(bx + cw*0.65,  by + cw*0.85);
-    this.pointerCtx.lineTo(bx + cw*0.65,  by + cw*0.65);
-    this.pointerCtx.lineTo(bx + cw,  by + cw*0.75);
-    this.pointerCtx.lineTo(bx + cw,  by + cw*0.50);
-    this.pointerCtx.lineTo(bx + cw*0.40,  by + cw*0.50);
-    this.pointerCtx.lineTo(bx + cw*0.50,  by + cw*0.65);
-    this.pointerCtx.lineTo(bx,  by + cw*0.5);
+    this.pointerCtx.moveTo(x, cy);
+    this.pointerCtx.lineTo(x + size * 0.42, cy - size * 0.30);
+    this.pointerCtx.lineTo(x + size * 0.34, cy - size * 0.09);
+    this.pointerCtx.lineTo(x + size * 0.92, cy - size * 0.09);
+    this.pointerCtx.lineTo(x + size * 0.78, cy + size * 0.04);
+    this.pointerCtx.lineTo(x + size * 0.94, cy + size * 0.11);
+    this.pointerCtx.lineTo(x + size * 0.34, cy + size * 0.11);
+    this.pointerCtx.lineTo(x + size * 0.42, cy + size * 0.30);
     this.pointerCtx.closePath();
 
-    this.pointerCtx.fillStyle   = '#FFD700';
+    this.pointerCtx.fillStyle = gradient;
     this.pointerCtx.fill();
-    this.pointerCtx.strokeStyle = '#1a1a00';
-    this.pointerCtx.lineWidth   = 1.5;
+    this.pointerCtx.strokeStyle = 'rgba(47, 32, 6, 0.9)';
+    this.pointerCtx.lineWidth = 2;
     this.pointerCtx.stroke();
 
     this.pointerCtx.restore();
@@ -277,10 +490,15 @@ export class WheelComponent implements AfterViewInit, OnChanges {
     this.spinning = true;
     this.gameStateService.setWheelSpinning(this.spinning);
 
-
     this.startTime = performance.now();
     const totalWeight = this.getTotalWeights();
-    const arcSize = (2 * Math.PI) / (totalWeight);
+    if (totalWeight <= 0) {
+      this.spinning = false;
+      this.gameStateService.setWheelSpinning(false);
+      return;
+    }
+
+    const arcSize = (2 * Math.PI) / totalWeight;
 
     this.winningNumber = this.getRandomWeightedIndex();
 
@@ -309,8 +527,6 @@ export class WheelComponent implements AfterViewInit, OnChanges {
     const easedProgress = 1 - Math.pow(1 - progress, 3);
     this.currentRotation = easedProgress * this.finalRotation;
 
-    const totalWeight = this.getTotalWeights();
-
     this.drawWheel(this.currentRotation);
 
     if (progress < 1) {
@@ -331,6 +547,9 @@ export class WheelComponent implements AfterViewInit, OnChanges {
 
   private getCurrentSegment(): string {
     const totalWeight = this.getTotalWeights();
+    if (totalWeight <= 0) {
+      return 'wheel.ready';
+    }
 
     const currentAngle = (2 * Math.PI - (this.currentRotation % (2 * Math.PI))) % (2 * Math.PI);
     let accumulatedWeight = 0;

@@ -62,21 +62,21 @@ export const badgesByGeneration: Record<number, (Badge | Badge[])[]> = {
     { name: 'badges.iceberg', sprite: 'https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/badges/50.png' },
   ],
   7: [
-    { name: 'badges.normalium_z', sprite: 'https://archives.bulbagarden.net/media/upload/f/f0/Dream_Normalium_Z_Sprite.png' },
-    { name: 'badges.fightinium_z', sprite: 'https://archives.bulbagarden.net/media/upload/0/08/Dream_Fightinium_Z_Sprite.png' },
+    { name: 'badges.normalium_z', sprite: 'https://img.pokemondb.net/sprites/items/normalium-z.png' },
+    { name: 'badges.fightinium_z', sprite: 'https://img.pokemondb.net/sprites/items/fightinium-z.png' },
     [
-      { name: 'badges.waterium_z', sprite: 'https://archives.bulbagarden.net/media/upload/e/ee/Dream_Waterium_Z_Sprite.png' },
-      { name: 'badges.firium_z', sprite: 'https://archives.bulbagarden.net/media/upload/f/f1/Dream_Firium_Z_Sprite.png' },
-      { name: 'badges.grassium_z', sprite: 'https://archives.bulbagarden.net/media/upload/d/d7/Dream_Grassium_Z_Sprite.png' }
+      { name: 'badges.waterium_z', sprite: 'https://img.pokemondb.net/sprites/items/waterium-z.png' },
+      { name: 'badges.firium_z', sprite: 'https://img.pokemondb.net/sprites/items/firium-z.png' },
+      { name: 'badges.grassium_z', sprite: 'https://img.pokemondb.net/sprites/items/grassium-z.png' }
     ],
-    { name: 'badges.rockium_z', sprite: 'https://archives.bulbagarden.net/media/upload/9/9b/Dream_Rockium_Z_Sprite.png' },
+    { name: 'badges.rockium_z', sprite: 'https://img.pokemondb.net/sprites/items/rockium-z.png' },
     [
-      { name: 'badges.electrium_z', sprite: 'https://archives.bulbagarden.net/media/upload/e/e4/Dream_Electrium_Z_Sprite.png' },
-      { name: 'badges.ghostium_z', sprite: 'https://archives.bulbagarden.net/media/upload/d/d1/Dream_Ghostium_Z_Sprite.png' },
+      { name: 'badges.electrium_z', sprite: 'https://img.pokemondb.net/sprites/items/electrium-z.png' },
+      { name: 'badges.ghostium_z', sprite: 'https://img.pokemondb.net/sprites/items/ghostium-z.png' },
     ],
-    { name: 'badges.darkinium_z', sprite: 'https://archives.bulbagarden.net/media/upload/1/1e/Dream_Darkinium_Z_Sprite.png' },
-    { name: 'badges.fairium_z', sprite: 'https://archives.bulbagarden.net/media/upload/b/b7/Dream_Fairium_Z_Sprite.png' },
-    { name: 'badges.groundium_z', sprite: 'https://archives.bulbagarden.net/media/upload/7/7e/Dream_Groundium_Z_Sprite.png' },
+    { name: 'badges.darkinium_z', sprite: 'https://img.pokemondb.net/sprites/items/darkinium-z.png' },
+    { name: 'badges.fairium_z', sprite: 'https://img.pokemondb.net/sprites/items/fairium-z.png' },
+    { name: 'badges.groundium_z', sprite: 'https://img.pokemondb.net/sprites/items/groundium-z.png' },
   ],
   8: [
     { name: 'badges.grass_galar', sprite: 'https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/badges/51.png' },
